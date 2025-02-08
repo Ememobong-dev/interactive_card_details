@@ -52,6 +52,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  /* height: 300px; */
 }
 
 
@@ -60,5 +61,11 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 300px;
+  height: 250px;
+}
+
+.border-gradient:focus{
+  border-image-source: linear-gradient(to right, hsl(249, 99%, 64%), hsl(278, 94%, 30%) );
+  border-image-slice: 1;
+  border-width: 2px;
 }
