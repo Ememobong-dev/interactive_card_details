@@ -26,6 +26,10 @@ export default {
       },
       backgroundImage: {
         "custom-gradient": "linear-gradient(135deg, hsl(278, 68%, 11%) 20%, #78350f 40%, hsl(220, 20%, 45%) 56%, hsl(278, 68%, 11%) 60%)",
+
+        'card-gradient': 'linear-gradient(135deg, hsl(249, 99%, 64%) 30%, #78350f 50%, #EC4899 70%, hsl(278, 94%, 30%) 90%)',
+
+        'card-gradient2': 'linear-gradient(135deg, hsl(249, 99%, 64%) 30%, #78350f 60%, #EC4899 76%, hsl(278, 94%, 30%) 100%)',
       },
     
     },

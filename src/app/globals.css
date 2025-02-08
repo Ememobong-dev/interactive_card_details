@@ -37,3 +37,28 @@ body {
   box-sizing: border-box;
   font-family: "space-grotesk-regular", sans-serif;
 }
+
+
+.desktop_gradient{
+  background-image: url(../../public/images/bg-main-desktop.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100dvh;
+}
+
+.card-gradient{
+  background-image: url(../../public/images/bg-card-front.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+
+.back-card{
+  background-image: url(../../public/images/bg-card-back.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+}
