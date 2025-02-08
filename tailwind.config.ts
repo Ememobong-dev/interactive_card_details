@@ -13,8 +13,21 @@ export default {
       "darkGrayishViolet": "hsl(279, 6%, 55%)",
       "veryDarkViolet": "hsl(278, 68%, 11%)",
       "RedError": "hsl(0, 100%, 66%)",
+      "startingGradient": "hsl(249, 99%, 64%)",
+      "endingGradient": "hsl(278, 94%, 30%)",
+      },
+      fontFamily: {
+        "sp-reg" : ["space-grotesk-regular", "sans-serif"],
+        "sp-bold" : ["space-grotesk-bold", "sans-serif"],
+        "sp-light" : ["space-grotesk-light", "sans-serif"],
+        "sp-semibold" : ["space-grotesk-semibold", "sans-serif"],
+        "sp-medium" : ["space-grotesk-medium", "sans-serif"],
 
       },
+      backgroundImage: {
+        "custom-gradient": "linear-gradient(135deg, hsl(278, 68%, 11%) 20%, #78350f 40%, hsl(220, 20%, 45%) 56%, hsl(278, 68%, 11%) 60%)",
+      },
+    
     },
   },
   plugins: [],
