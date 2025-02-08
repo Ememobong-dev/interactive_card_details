@@ -3,6 +3,8 @@ import { Input, Label } from "@/components/Input";
 import InputGroup from "@/components/InputGroup";
 import { ChangeEvent, useReducer, useState } from "react";
 import FormReducer, { INITIAL_STATE } from "./reducers/FormReducer";
+import Image from "next/image";
+import check from "../../public/images/icon-complete.svg";
 
 export default function Home() {
   const [state, dispatch] = useReducer(FormReducer, INITIAL_STATE);
@@ -14,8 +16,22 @@ export default function Home() {
     let { name, value } = e.target;
 
     if (name === "cardNumber") {
-      value = value.replace(/\D/g, "");
+      value = value.replace(/\D/g, "").slice(0, 16);
       value = value.replace(/(\d{4})/g, "$1 ").trim();
+    }
+
+    if (name === "cardExpiryMonth" || name === "cardExpiryYear") {
+      value = value.replace(/\D/g, "");
+      if (value.length > 2) {
+        value = value.slice(0, 2); 
+      }
+    }
+  
+    if (name === "cvc") {
+      value = value.replace(/\D/g, "");
+      if (value.length > 3) {
+        value = value.slice(0, 3);
+      }
     }
 
     dispatch({
@@ -23,7 +39,6 @@ export default function Home() {
       payload: { name, value },
     });
   };
-
 
   const handleFormSubmit = () => {
     if (!state.cardName.value) {
@@ -33,9 +48,11 @@ export default function Home() {
           name: "cardName",
           errorExist: true,
           errorMsg: "CardHolder Name is required",
-        }});
-        isInputError = true
+        },
+      });
+      isInputError = true;
     }
+
     if (!state.cardNumber.value) {
       dispatch({
         type: "UPDATE_ERROR",
@@ -45,8 +62,22 @@ export default function Home() {
           errorMsg: "CardNumber is required",
         },
       });
-      isInputError = true
+      isInputError = true;
     }
+
+    if ((state.cardNumber.value).length < 16) {
+      dispatch({
+        type: "UPDATE_ERROR",
+        payload: {
+          name: "cardNumber",
+          errorExist: true,
+          errorMsg: "CardNumber must be 16 digits",
+        },
+      });
+      isInputError = true;
+    }
+
+
 
     if (!state.cardExpiryMonth.value) {
       dispatch({
@@ -57,7 +88,7 @@ export default function Home() {
           errorMsg: "CardExpiryMonth cant't be blank",
         },
       });
-      isInputError = true
+      isInputError = true;
     }
     if (!state.cardExpiryYear.value) {
       dispatch({
@@ -68,21 +99,30 @@ export default function Home() {
           errorMsg: "cardExpiryYear can't be blank",
         },
       });
-      isInputError = true
+      isInputError = true;
     }
     if (!state.cvc.value) {
       dispatch({
         type: "UPDATE_ERROR",
         payload: { name: "cvc", errorExist: true, errorMsg: "CVC is required" },
       });
-      isInputError = true
+      isInputError = true;
     }
 
-    if(!isInputError) {
-      setAllInputValidated(true)
+    if (!isInputError) {
+      setAllInputValidated(true);
     }
-
   };
+
+  const handleReset = () => {
+    dispatch({
+      type: "RESET_INPUT"
+    })
+    setAllInputValidated(false)
+  }
+
+
+
 
   return (
     <div className="flex w-full h-screen">
@@ -97,15 +137,13 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-4">
                 <span className="flex w-full text-2xl tracking-[0.2rem] font-sp-bold gap-5 justify-between items-center">
-                  {allInputValidated &&
-                  state.cardNumber.value}
+                  {allInputValidated && state.cardNumber.value}
                 </span>
                 <span className="flex w-full justify-between items-center uppercase font-sp-medium tracking-widest">
                   <p>{allInputValidated && state.cardName.value}</p>
                   <p>
-                    {
-                      allInputValidated && ` ${state.cardExpiryMonth.value} / ${state.cardExpiryYear.value} `
-                    }
+                    {allInputValidated &&
+                      ` ${state.cardExpiryMonth.value} / ${state.cardExpiryYear.value} `}
                     {/* {` ${state.cardExpiryMonth.value} / ${state.cardExpiryYear.value} `} */}
                   </p>
                 </span>
@@ -115,91 +153,118 @@ export default function Home() {
             {/* BACK CARD */}
             <div className=" back-card relative -right-20 w-full flex justify-end rounded-lg py-5 px-8 shadow-2xl">
               <div className=" flex gap-5 items-center">
-                <span className="text-white mr-4">{allInputValidated &&  state.cvc.value}</span>
+                <span className="text-white mr-4">
+                  {allInputValidated && state.cvc.value}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="w-[70%] pl-28 h-full bg-white flex flex-col gap-8 justify-center items-center ">
-        <div className="w-1/2 flex flex-col gap-8 ">
-          <InputGroup
-            name="cardName"
-            title="Cardholder name"
-            placeholder="e.g. Jane Appleseed"
-            value={state.cardName.value}
-            handleOnChange={handleInputChange}
-          />
-          {state.cardName.errorExist && (
-            <p className="text-RedError text-sm"> {state.cardName.errorMsg} </p>
-          )}
-          <InputGroup
-            name="cardNumber"
-            title="Card Number"
-            placeholder="e.g. 1234 5678 9123 0000"
-            value={state.cardNumber.value}
-            handleOnChange={handleInputChange}
-          />
-          {state.cardNumber.errorExist && (
-            <p className="text-RedError text-sm">
-              {" "}
-              {state.cardNumber.errorMsg}{" "}
-            </p>
-          )}
-          <div className="flex justify-between gap-3">
-            <div className="flex flex-col gap-2">
-              <Label title="Exp. Date (MM/YY)" />
-              <div className="flex gap-3">
-                <Input
-                  placeholder="MM"
-                  size="md"
-                  value={state.cardExpiryMonth.value}
-                  handleOnChange={handleInputChange}
-                  name="cardExpiryMonth"
-                />
-                <Input
-                  placeholder="YY"
-                  size="md"
-                  value={state.cardExpiryYear.value}
-                  handleOnChange={handleInputChange}
-                  name="cardExpiryYear"
-                />
+        {!allInputValidated ? (
+          <div className="w-1/2 flex flex-col gap-8 ">
+            <InputGroup
+              name="cardName"
+              title="Cardholder name"
+              placeholder="e.g. Jane Appleseed"
+              value={state.cardName.value}
+              handleOnChange={handleInputChange}
+            />
+            {state.cardName.errorExist && (
+              <p className="text-RedError text-sm">
+                {" "}
+                {state.cardName.errorMsg}{" "}
+              </p>
+            )}
+            <InputGroup
+              name="cardNumber"
+              title="Card Number"
+              placeholder="e.g. 1234 5678 9123 0000"
+              value={state.cardNumber.value}
+              handleOnChange={handleInputChange}
+            />
+            {state.cardNumber.errorExist && (
+              <p className="text-RedError text-sm">
+                {" "}
+                {state.cardNumber.errorMsg}{" "}
+              </p>
+            )}
+            <div className="flex justify-between gap-3">
+              <div className="flex flex-col gap-2">
+                <Label title="Exp. Date (MM/YY)" />
+                <div className="flex gap-3">
+                  <Input
+                    placeholder="MM"
+                    size="md"
+                    value={state.cardExpiryMonth.value}
+                    handleOnChange={handleInputChange}
+                    name="cardExpiryMonth"
+                  />
+                  <Input
+                    placeholder="YY"
+                    size="md"
+                    value={state.cardExpiryYear.value}
+                    handleOnChange={handleInputChange}
+                    name="cardExpiryYear"
+                  />
+                </div>
+                {state.cardExpiryMonth.errorExist && (
+                  <p className="text-RedError text-sm">
+                    {" "}
+                    {state.cardExpiryMonth.errorMsg}{" "}
+                  </p>
+                )}
+                {state.cardExpiryYear.errorExist && (
+                  <p className="text-RedError text-sm">
+                    {" "}
+                    {state.cardExpiryYear.errorMsg}{" "}
+                  </p>
+                )}
               </div>
-              {state.cardExpiryMonth.errorExist && (
-                <p className="text-RedError text-sm">
-                  {" "}
-                  {state.cardExpiryMonth.errorMsg}{" "}
-                </p>
-              )}
-              {state.cardExpiryYear.errorExist && (
-                <p className="text-RedError text-sm">
-                  {" "}
-                  {state.cardExpiryYear.errorMsg}{" "}
-                </p>
-              )}
-            </div>
-            <div>
-              <InputGroup
-                name="cvc"
-                title="CVC"
-                placeholder="e.g. 123"
-                value={state.cvc.value}
-                handleOnChange={handleInputChange}
-              />
-              {state.cvc.errorExist && (
-                <p className="text-RedError text-sm"> {state.cvc.errorMsg} </p>
-              )}
+              <div>
+                <InputGroup
+                  name="cvc"
+                  title="CVC"
+                  placeholder="e.g. 123"
+                  value={state.cvc.value}
+                  handleOnChange={handleInputChange}
+                />
+                {state.cvc.errorExist && (
+                  <p className="text-RedError text-sm">
+                    {" "}
+                    {state.cvc.errorMsg}{" "}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col items-center gap-5 text-xl ">
+            <span>
+              <Image src={check} alt="check" />
+            </span>
+            <span>THANK YOU!</span>
+            <p>We have added your card details</p>
+          </div>
+        )}
 
         <div className="w-1/2 mt-5">
-          <button
-            onClick={handleFormSubmit}
-            className="w-full hover:opacity-45 rounded-lg shadow-md px-8 py-4 text-lg font-sp-semibold tracking-widest text-center bg-veryDarkViolet text-white"
-          >
-            Confirm
-          </button>
+          {!allInputValidated ? (
+            <button
+              onClick={handleFormSubmit}
+              className="w-full hover:opacity-45 rounded-lg shadow-md px-8 py-4 text-lg font-sp-semibold tracking-widest text-center bg-veryDarkViolet text-white"
+            >
+              Confirm
+            </button>
+          ) : (
+            <button
+              onClick={handleReset}
+              className="w-full hover:opacity-45 rounded-lg shadow-md px-8 py-4 text-lg font-sp-semibold tracking-widest text-center bg-veryDarkViolet text-white"
+            >
+              Continue
+            </button>
+          )}
         </div>
       </div>
     </div>
