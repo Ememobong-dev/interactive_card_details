@@ -30,7 +30,7 @@ export const Input = ({
       name={name}
       value={value}
       onChange={handleOnChange}
-      className={`border outline-none placeholder:text-lg placeholder:font-sp-medium placeholder:tracking-widest bg-transparent rounded-lg border-gradient ${
+      className={`border outline-none placeholder:text-base placeholder:font-sp-medium placeholder:tracking-widest placeholder:text-veryDarkViolet  bg-transparent rounded-lg border-gradient ${
         size === "md" ? "w-32" : "w-full"
       } p-4 `}
       placeholder={placeholder}
