@@ -244,8 +244,8 @@ export default function Home() {
             <span>
               <Image src={check} alt="check" />
             </span>
-            <span>THANK YOU!</span>
-            <p>We have added your card details</p>
+            <span className="text-veryDarkViolet text-2xl font-sp-semibold">THANK YOU!</span>
+            <p className="text-darkGrayishViolet">We have added your card details</p>
           </div>
         )}
 
