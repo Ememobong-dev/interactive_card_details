@@ -2,7 +2,6 @@
 
 
 import { InputType, LabelType } from "@/interface";
-import { useRef } from "react";
 
 
 export const Label = ({ title }: LabelType) => {
@@ -24,13 +23,10 @@ export const Input = ({
   handleOnChange,
 }: InputType) => {
 
-    const ref = useRef();
-    console.log(ref.current?.value)
 
   return (
     <input
       type="text"
-      ref={ref}
       name={name}
       value={value}
       onChange={handleOnChange}
